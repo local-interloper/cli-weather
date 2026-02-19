@@ -12,7 +12,7 @@ func main() {
 	args := flag.Args()
 
 	if len(args) < 1 {
-		println("Usage: weather cityName")
+		println("Usage: cli-weather <city>")
 		return
 	}
 

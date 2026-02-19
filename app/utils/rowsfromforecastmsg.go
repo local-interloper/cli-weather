@@ -4,20 +4,20 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/bubbles/table"
-	"github.com/local-interloper/cli-weather/app/msgs"
+	"github.com/local-interloper/cli-weather/app/types"
 )
 
-func RowsFromForecastMsg(msg msgs.ForecastMsg) []table.Row {
+func RowsFromForecast(forecast types.Forecast) []table.Row {
 	rows := []table.Row{}
 
-	for i := range len(msg.Daily.Time) {
+	for i := range len(forecast.Daily.Time) {
 		row := []string{}
 
-		row = append(row, fmt.Sprintf("%s", IsoToWeekday(msg.Daily.Time[i])))
-		row = append(row, fmt.Sprintf("%s", CodeToStatus(msg.Daily.WeatherCode[i])))
-		row = append(row, fmt.Sprintf("%.1f", msg.Daily.PrecipitationProbabilityMax[i]))
-		row = append(row, fmt.Sprintf("%.1f", msg.Daily.TemperatureMin[i]))
-		row = append(row, fmt.Sprintf("%.1f", msg.Daily.TemperatureMax[i]))
+		row = append(row, fmt.Sprintf("%s", IsoToWeekday(forecast.Daily.Time[i])))
+		row = append(row, fmt.Sprintf("%s", CodeToStatus(forecast.Daily.WeatherCode[i])))
+		row = append(row, fmt.Sprintf("%.1f", forecast.Daily.PrecipitationProbabilityMax[i]))
+		row = append(row, fmt.Sprintf("%.1f", forecast.Daily.TemperatureMin[i]))
+		row = append(row, fmt.Sprintf("%.1f", forecast.Daily.TemperatureMax[i]))
 
 		rows = append(rows, row)
 	}

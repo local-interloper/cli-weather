@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/bubbles/table"
-	"github.com/local-interloper/cli-weather/app/msgs"
+	"github.com/local-interloper/cli-weather/app/types"
 )
 
-func ColumnsFromForecastMsg(msg msgs.ForecastMsg) []table.Column {
+func ColumnsFromForecast(forecast types.Forecast) []table.Column {
 	return []table.Column{
 		{
 			Title: "Date",
@@ -18,15 +18,15 @@ func ColumnsFromForecastMsg(msg msgs.ForecastMsg) []table.Column {
 			Width: 25,
 		},
 		{
-			Title: fmt.Sprintf("Rain %s", msg.DailyUnits.PrecipitationProbabilityMax),
+			Title: fmt.Sprintf("Rain %s", forecast.DailyUnits.PrecipitationProbabilityMax),
 			Width: 8,
 		},
 		{
-			Title: fmt.Sprintf("Min %s", msg.DailyUnits.TemperatureMin),
+			Title: fmt.Sprintf("Min %s", forecast.DailyUnits.TemperatureMin),
 			Width: 8,
 		},
 		{
-			Title: fmt.Sprintf("Max %s", msg.DailyUnits.TemperatureMax),
+			Title: fmt.Sprintf("Max %s", forecast.DailyUnits.TemperatureMax),
 			Width: 8,
 		},
 	}

@@ -17,6 +17,7 @@ type AppModel struct {
 	table table.Model
 	ready bool
 	city  string
+	err   error
 }
 
 func Make(city string) AppModel {
@@ -45,8 +46,13 @@ func (a AppModel) Init() tea.Cmd {
 func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case msgs.ForecastMsg:
-		a.table.SetColumns(utils.ColumnsFromForecastMsg(msg))
-		a.table.SetRows(utils.RowsFromForecastMsg(msg))
+		if msg.Err != nil {
+			a.err = msg.Err
+			return a, tea.Quit
+		}
+
+		a.table.SetColumns(utils.ColumnsFromForecast(msg.Forecast))
+		a.table.SetRows(utils.RowsFromForecast(msg.Forecast))
 		a.ready = true
 		return a, tea.Quit
 
@@ -70,6 +76,10 @@ func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (a AppModel) View() string {
+	if a.err != nil {
+		return fmt.Sprintf("Error: %s\n", a.err.Error())
+	}
+
 	if !a.ready {
 		return fmt.Sprintf("Fetching weather %s\n", a.spin.View())
 	}

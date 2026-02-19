@@ -37,8 +37,10 @@ func GetForecast(coords types.Coords) msgs.ForecastMsg {
 		panic(err.Error())
 	}
 
-	var forecast msgs.ForecastMsg
+	var forecast types.Forecast
 	json.Unmarshal(body, &forecast)
 
-	return forecast
+	return msgs.ForecastMsg{
+		Forecast: forecast,
+	}
 }

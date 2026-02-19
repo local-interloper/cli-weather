@@ -34,7 +34,7 @@ go install github.com/local-interloper/cli-weather@latest
 ```sh
 git clone https://github.com/local-interloper/cli-weather
 cd cli-weather
-go build -o weather .
+go build -o cli-weather .
 ```
 
 ---
@@ -42,13 +42,13 @@ go build -o weather .
 ## Usage
 
 ```sh
-weather <city>
+cli-weather <city>
 ```
 
 ```sh
-weather London
-weather "New York"
-weather Paris
+cli-weather London
+cli-weather "New York"
+cli-weather Paris
 ```
 
 A spinner appears while data loads, then the forecast table renders instantly. Press `q` or `Ctrl+C` to exit.
