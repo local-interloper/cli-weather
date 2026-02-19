@@ -7,7 +7,7 @@
 ![No API key](https://img.shields.io/badge/API%20key-not%20required-brightgreen?style=flat-square)
 
 ```
-$ weather Tokyo
+$ cli-weather Tokyo
 
   Date       Status                    Rain %   Min      Max
   Monday     Clear                     5.0      18.2     26.4
