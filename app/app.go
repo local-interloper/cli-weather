@@ -53,6 +53,8 @@ func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		a.table.SetColumns(utils.ColumnsFromForecast(msg.Forecast))
 		a.table.SetRows(utils.RowsFromForecast(msg.Forecast))
+		a.table.SetHeight(len(msg.Forecast.Daily.Time))
+
 		a.ready = true
 		return a, tea.Quit
 

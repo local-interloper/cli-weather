@@ -11,10 +11,10 @@ import (
 	"github.com/local-interloper/cli-weather/app/types"
 )
 
-func GetCity(cityName string) *types.City {
+func GetCity(cityName string) (types.City, error) {
 	requestUrl, err := url.Parse(fmt.Sprintf("%s/search", consts.GeocodingApiUrl))
 	if err != nil {
-		panic(err.Error())
+		return types.City{}, err
 	}
 
 	query := requestUrl.Query()
@@ -24,20 +24,20 @@ func GetCity(cityName string) *types.City {
 
 	res, err := http.Get(requestUrl.String())
 	if err != nil {
-		panic(err.Error())
+		return types.City{}, err
 	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		panic(err.Error())
+		return types.City{}, err
 	}
 
 	var response types.SearchResponse
 	json.Unmarshal(body, &response)
 
 	if len(response.Results) == 0 {
-		return nil
+		return types.City{}, fmt.Errorf("Failed to find city with name %s", cityName)
 	}
 
-	return &response.Results[0]
+	return response.Results[0], nil
 }

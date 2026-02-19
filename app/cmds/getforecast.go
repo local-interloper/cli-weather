@@ -1,8 +1,6 @@
 package cmds
 
 import (
-	"errors"
-
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/local-interloper/cli-weather/app/fetchers"
 	"github.com/local-interloper/cli-weather/app/msgs"
@@ -11,11 +9,11 @@ import (
 
 func GetForecast(cityName string) tea.Cmd {
 	return func() tea.Msg {
-		city := fetchers.GetCity(cityName)
+		city, err := fetchers.GetCity(cityName)
 
-		if city == nil {
+		if err != nil {
 			return msgs.ForecastMsg{
-				Err: errors.New("Failed to find city"),
+				Err: err,
 			}
 		}
 
