@@ -7,21 +7,13 @@ import (
 	"github.com/local-interloper/cli-weather/app/types"
 )
 
-func GetForecast(cityName string) tea.Cmd {
+func GetForecast(city types.City) tea.Cmd {
 	return func() tea.Msg {
-		city, err := fetchers.GetCity(cityName)
+		response, err := fetchers.GetForecast(city)
 
-		if err != nil {
-			return msgs.ForecastMsg{
-				Err: err,
-			}
+		return msgs.ForecastMsg{
+			ForecastResponse: response,
+			Err:              err,
 		}
-
-		coords := types.Coords{
-			Latitude:  city.Latitude,
-			Longitude: city.Longitude,
-		}
-
-		return fetchers.GetForecast(coords)
 	}
 }

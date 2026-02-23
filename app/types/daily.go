@@ -1,6 +1,6 @@
 package types
 
-type ForecastData struct {
+type Daily struct {
 	Time                        []string  `json:"time"`
 	TemperatureMax              []float32 `json:"temperature_2m_max"`
 	TemperatureMin              []float32 `json:"temperature_2m_min"`

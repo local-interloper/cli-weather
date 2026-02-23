@@ -7,7 +7,7 @@ import (
 	"github.com/local-interloper/cli-weather/app/types"
 )
 
-func RowsFromForecast(forecast types.Forecast) []table.Row {
+func ForecastToRows(forecast types.ForecastResponse) []table.Row {
 	rows := []table.Row{}
 
 	for i := range len(forecast.Daily.Time) {

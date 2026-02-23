@@ -11,33 +11,33 @@ import (
 	"github.com/local-interloper/cli-weather/app/types"
 )
 
-func GetCity(cityName string) (types.City, error) {
+func GetCities(cityQuery string) (types.SearchResponse, error) {
 	requestUrl, err := url.Parse(fmt.Sprintf("%s/search", consts.GeocodingApiUrl))
 	if err != nil {
-		return types.City{}, err
+		return types.SearchResponse{}, err
 	}
 
 	query := requestUrl.Query()
-	query.Add("name", cityName)
+	query.Add("name", cityQuery)
 
 	requestUrl.RawQuery = query.Encode()
 
 	res, err := http.Get(requestUrl.String())
 	if err != nil {
-		return types.City{}, err
+		return types.SearchResponse{}, err
 	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		return types.City{}, err
+		return types.SearchResponse{}, err
 	}
 
 	var response types.SearchResponse
 	json.Unmarshal(body, &response)
 
 	if len(response.Results) == 0 {
-		return types.City{}, fmt.Errorf("Failed to find city with name %s", cityName)
+		return types.SearchResponse{}, fmt.Errorf("Failed to find city with name %s", cityQuery)
 	}
 
-	return response.Results[0], nil
+	return response, nil
 }

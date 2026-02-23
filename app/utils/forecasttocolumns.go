@@ -7,7 +7,7 @@ import (
 	"github.com/local-interloper/cli-weather/app/types"
 )
 
-func ColumnsFromForecast(forecast types.Forecast) []table.Column {
+func ForecastToColumns(forecast types.ForecastResponse) []table.Column {
 	return []table.Column{
 		{
 			Title: "Date",

@@ -3,6 +3,6 @@ package msgs
 import "github.com/local-interloper/cli-weather/app/types"
 
 type ForecastMsg struct {
-	Err      error
-	Forecast types.Forecast
+	Err              error
+	ForecastResponse types.ForecastResponse
 }

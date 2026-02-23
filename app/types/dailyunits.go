@@ -1,6 +1,6 @@
 package types
 
-type Units struct {
+type DailyUnits struct {
 	Time                        string `json:"time"`
 	TemperatureMax              string `json:"temperature_2m_max"`
 	TemperatureMin              string `json:"temperature_2m_min"`
