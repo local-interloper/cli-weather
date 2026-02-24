@@ -1,4 +1,4 @@
-package models
+package cityquery
 
 import (
 	"github.com/charmbracelet/bubbles/help"
@@ -10,41 +10,13 @@ import (
 	"github.com/local-interloper/cli-weather/app/utils"
 )
 
-type setupModelKeymapType struct {
-	Accept key.Binding
-	Quit   key.Binding
-}
-
-var setupModelKeymap setupModelKeymapType = setupModelKeymapType{
-	Accept: key.NewBinding(
-		key.WithKeys("enter"),
-		key.WithHelp("ENTER", "Accept"),
-	),
-	Quit: key.NewBinding(
-		key.WithKeys("ctrl+c"),
-		key.WithHelp("Ctrl+C", "Quit"),
-	),
-}
-
-func (k setupModelKeymapType) ShortHelp() []key.Binding {
-	return []key.Binding{
-		k.Accept, k.Quit,
-	}
-}
-
-func (k setupModelKeymapType) FullHelp() [][]key.Binding {
-	return [][]key.Binding{
-		{k.Accept, k.Quit},
-	}
-}
-
-type SetupModel struct {
+type Model struct {
 	queryInput textinput.Model
 	help       help.Model
 	style      lipgloss.Style
 }
 
-func MakeSetupModel() SetupModel {
+func New() Model {
 	width, height := utils.TermSize()
 
 	ti := textinput.New()
@@ -55,27 +27,26 @@ func MakeSetupModel() SetupModel {
 
 	style := lipgloss.NewStyle().Width(width).Height(height - 1)
 
-	return SetupModel{
+	return Model{
 		queryInput: ti,
 		help:       help.New(),
 		style:      style,
 	}
 }
 
-func (m SetupModel) Init() tea.Cmd {
+func (m Model) Init() tea.Cmd {
 	return tea.Batch(textinput.Blink)
 }
 
-func (m SetupModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tea.KeyMsg:
-		if key.Matches(msg, setupModelKeymap.Accept) {
-			return m, cmds.SwitchModel(MakeCityPickerModel(m.queryInput.Value()))
-
+		if key.Matches(msg, keymap.Accept) {
+			return m, cmds.GoToCityPicker(m.queryInput.Value())
 		}
 
-		if key.Matches(msg, forecastModelKeymap.Quit) {
+		if key.Matches(msg, keymap.Quit) {
 			return m, tea.Quit
 		}
 	}
@@ -90,7 +61,7 @@ func (m SetupModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m SetupModel) View() string {
+func (m Model) View() string {
 	out := ""
 
 	out += m.style.Render(
@@ -98,7 +69,7 @@ func (m SetupModel) View() string {
 		m.queryInput.View(),
 	)
 
-	out += m.help.View(setupModelKeymap)
+	out += m.help.View(keymap)
 
 	return out
 }

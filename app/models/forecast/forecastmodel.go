@@ -1,6 +1,8 @@
-package models
+package forecast
 
 import (
+	"fmt"
+
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/table"
@@ -12,38 +14,17 @@ import (
 	"github.com/local-interloper/cli-weather/app/utils"
 )
 
-type forecastModelKeymapType struct {
-	Search key.Binding
-	Quit   key.Binding
+type Model struct {
+	city   types.City
+	banner string
+	table  table.Model
+	help   help.Model
 }
 
-func (k forecastModelKeymapType) ShortHelp() []key.Binding {
-	return []key.Binding{k.Search, k.Quit}
-}
-
-func (k forecastModelKeymapType) FullHelp() [][]key.Binding {
-	return [][]key.Binding{{k.Search, k.Quit}}
-}
-
-var forecastModelKeymap forecastModelKeymapType = forecastModelKeymapType{
-	Search: key.NewBinding(
-		key.WithKeys("s"),
-		key.WithHelp("S", "Search"),
-	),
-	Quit: key.NewBinding(
-		key.WithKeys("ctrl+c"),
-		key.WithHelp("Ctrl+C", "Quit"),
-	),
-}
-
-type ForecastModel struct {
-	city  types.City
-	table table.Model
-	help  help.Model
-}
-
-func MakeForecastModel(city types.City) ForecastModel {
+func New(city types.City) Model {
 	width, height := utils.TermSize()
+
+	banner := fmt.Sprintf("Weather forecast for: %s, %s\n\n", city.Name, city.Country)
 
 	ts := table.DefaultStyles()
 	ts.Header = ts.Header.Background(lipgloss.Color("#8888ff"))
@@ -51,24 +32,25 @@ func MakeForecastModel(city types.City) ForecastModel {
 
 	tb := table.New(
 		table.WithWidth(width),
-		table.WithHeight(height-1),
+		table.WithHeight(height-3),
 		table.WithStyles(ts),
 	)
 
 	tb.Focus()
 
-	return ForecastModel{
-		city:  city,
-		table: tb,
-		help:  help.New(),
+	return Model{
+		city:   city,
+		banner: banner,
+		table:  tb,
+		help:   help.New(),
 	}
 }
 
-func (m ForecastModel) Init() tea.Cmd {
+func (m Model) Init() tea.Cmd {
 	return tea.Batch(cmds.GetForecast(m.city))
 }
 
-func (m ForecastModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case msgs.ForecastMsg:
 		columns := utils.ForecastToColumns(msg.ForecastResponse)
@@ -76,25 +58,28 @@ func (m ForecastModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		m.table.SetColumns(columns)
 		m.table.SetRows(rows)
+
 		return m, nil
 
 	case tea.KeyMsg:
-		if key.Matches(msg, forecastModelKeymap.Quit) {
+		if key.Matches(msg, keymap.Quit) {
 			return m, tea.Quit
 		}
 
-		if key.Matches(msg, forecastModelKeymap.Search) {
+		if key.Matches(msg, keymap.Search) {
 			utils.ClearDefaultCity()
-			return m, cmds.SwitchModel(MakeSetupModel())
+			return m, cmds.GoToCityQuery()
 		}
 	}
 
 	return m, nil
 }
 
-func (m ForecastModel) View() string {
+func (m Model) View() string {
 	out := ""
+	out += m.banner
 	out += m.table.View()
-	out += m.help.View(forecastModelKeymap)
+	out += "\n"
+	out += m.help.View(keymap)
 	return out
 }

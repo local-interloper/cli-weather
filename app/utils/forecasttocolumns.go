@@ -15,7 +15,7 @@ func ForecastToColumns(forecast types.ForecastResponse) []table.Column {
 		},
 		{
 			Title: "Status",
-			Width: 25,
+			Width: 30,
 		},
 		{
 			Title: fmt.Sprintf("Rain %s", forecast.DailyUnits.PrecipitationProbabilityMax),

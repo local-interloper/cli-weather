@@ -1,83 +1,56 @@
-# ⛅ cli-weather
+# cli-weather
 
-> A snappy terminal weather app — search for any city and get a 7-day forecast, right in your shell.
+![Go version](https://img.shields.io/badge/go-1.25.7-00ADD8?logo=go&logoColor=white)
+![License](https://img.shields.io/badge/license-GPL--3.0-blue)
+![Built with Bubbletea](https://img.shields.io/badge/built%20with-Bubbletea-EE6FF8?logo=charm&logoColor=white)
+![Open-Meteo](https://img.shields.io/badge/weather-Open--Meteo-orange)
 
-![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat-square&logo=go&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-![No API key](https://img.shields.io/badge/API%20key-not%20required-brightgreen?style=flat-square)
+> A sleek terminal weather app — no API key, no config, just forecasts.
 
-```
-  Date       Status                    Rain %   Min      Max
-  Monday     Clear                     5.0      18.2     26.4
-  Tuesday    Cloudy                    20.0     17.8     24.1
-  Wednesday  Rain                      75.0     15.3     19.9
-  Thursday   Clear                     10.0     16.1     25.0
-  Friday     Clear                     0.0      17.4     27.2
-  Saturday   Drizzle                   40.0     16.9     22.3
-  Sunday     Thunderstorm              85.0     14.5     18.8
-```
+## Features
 
----
+- **Worldwide city search** — find any city on the planet
+- **7-day forecast** — daily min/max temperatures, precipitation chance, and weather status at a glance
+- **Remembers your city** — launches straight into your forecast after the first run
+- **Zero setup** — powered by the free [Open-Meteo](https://open-meteo.com/) API
 
 ## Installation
 
-**Via `go install`:**
 
-```sh
+<details>
+<summary>Go install</summary>
+
+```bash
 go install github.com/local-interloper/cli-weather@latest
 ```
 
-**Or build from source:**
+</details>
 
-```sh
+<details>
+<summary>Build from source</summary>
+
+```bash
 git clone https://github.com/local-interloper/cli-weather
 cd cli-weather
 go build -o cli-weather .
 ```
 
----
+</details>
 
 ## Usage
 
-```sh
+```bash
 cli-weather
 ```
 
-The app is fully interactive. On first run it walks you through three screens:
+On first launch you'll be prompted to search for a city. Pick one from the results and your choice is saved — next time you run it, your forecast loads instantly.
 
-1. **City search** — type a city name and press `Enter`
-2. **City picker** — select the matching city from a list, press `Enter` to confirm
-3. **Forecast** — view the 7-day forecast table
+To switch cities, press `/` from the forecast view.
 
-Your selected city is saved to `~/.config/cli-weather/city.json` and loaded automatically on future runs, so you skip straight to the forecast.
+## Configuration
 
----
+Your default city is stored at `~/.config/cli-weather/city.json`. Delete it to reset.
 
-## Keybindings
+## License
 
-| Screen | Key | Action |
-|---|---|---|
-| **City search** | `Enter` | Search for the typed city |
-| | `Ctrl+C` | Quit |
-| **City picker** | `Enter` | Select city and show forecast |
-| | `↑` / `↓` | Navigate list |
-| | `/` | Filter list |
-| | `Ctrl+C` | Back to city search |
-| **Forecast** | `S` | Search a new city (clears saved default) |
-| | `Q` / `Ctrl+C` | Quit |
-
----
-
-## Data
-
-Powered by [Open-Meteo](https://open-meteo.com/) — free, open, no account needed.
-
----
-
-## Built with
-
-| | |
-|---|---|
-| [Bubble Tea](https://github.com/charmbracelet/bubbletea) | TUI framework |
-| [Bubbles](https://github.com/charmbracelet/bubbles) | Spinner, table, list & input components |
-| [Lip Gloss](https://github.com/charmbracelet/lipgloss) | Terminal styling |
+GPL-3.0 — see [LICENSE](LICENSE).
